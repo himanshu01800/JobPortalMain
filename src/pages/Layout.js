@@ -1,20 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import AppModal1 from "./RegisterPop";
+import AppModal from "./LoginPop";
 
 const Layout = () => {
   return (
     <>
-      {/* <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About Us</Link></li>
-          <li><Link to="/services">Services</Link></li>
-          <li><Link to="/career">Career</Link></li>
-          <li><Link to="/contact">Contact Us</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/register">Register</Link></li>
-        </ul>
-      </nav> */}
       <div className="container d-flex justify-content-center p-0 ">
         <nav className="navbar navbar-expand-lg p-0">
           <div className="container-fluid">
@@ -54,12 +45,22 @@ const Layout = () => {
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/login">
+                  <NavLink
+                    className="nav-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    to="/login"
+                  >
                     <strong>Login</strong>
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/register">
+                  <NavLink
+                    className="nav-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop1"
+                    to="#"
+                  >
                     <strong>Register</strong>
                   </NavLink>
                 </li>
@@ -68,6 +69,8 @@ const Layout = () => {
           </div>
         </nav>
       </div>
+      <AppModal />
+      <AppModal1 />
       <Outlet />
     </>
   );

@@ -7,8 +7,6 @@ import NoPage from "./pages/NoPage";
 import AdminLayout from "./pages/AdminLayout";
 import About from "./pages/About";
 import Staff from "./pages/Staff";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Career from "./pages/Career";
 import Services from "./pages/Services";
 import CompanyLayout from "./pages/CompanyLayout";
@@ -16,6 +14,8 @@ import JobseekerLayout from "./pages/JobseekerLayout";
 import FindCandiate from "./pages/FindCandiate";
 import Header from "./Header";
 import Header2 from "./pages/Header2";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export default function App() {
   return (
