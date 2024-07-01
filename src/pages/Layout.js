@@ -1,7 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import AppModal1 from "./RegisterPop";
-import AppModal from "./LoginPop";
+
 
 const Layout = () => {
   return (
@@ -47,19 +46,7 @@ const Layout = () => {
                 <li className="nav-item">
                   <NavLink
                     className="nav-link"
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"
-                    to="/login"
-                  >
-                    <strong>Login</strong>
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop1"
-                    to="#"
+                    to="/register"
                   >
                     <strong>Register</strong>
                   </NavLink>
@@ -69,8 +56,7 @@ const Layout = () => {
           </div>
         </nav>
       </div>
-      <AppModal />
-      <AppModal1 />
+     
       <Outlet />
     </>
   );

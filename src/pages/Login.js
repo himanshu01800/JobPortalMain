@@ -8,10 +8,26 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Add your login logic here
-    // if (userId === "admin@gmail.com") nav("/Adminpage");
-    // else if (userId === "company@gmail.com") nav("/CompanyLogin");
-    // else if (userId === "jobseeker@gmail.com") nav("/JobSeekerLogin");
+   console.log("clicked");
+    try {
+      const response = await fetch(`http://localhost:8080/users/login?email=${userId}&password=${password}`);
+
+      if (response.ok) {
+        // Assuming your API responds with user data or a token
+        const result = await response.json();
+        if(result!=null){
+          console.log(result);
+        }
+
+       
+      } else {
+        console.error("Registration failed");
+        // Handle registration failure (e.g., display error message)
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      // Handle error (e.g., display error message)
+    }
   };
   return (
     <>

@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../features/userDetailSlice";
 
 const Home = ({ onLogin }) => {
   const nav = useNavigate();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+ 
+  const dispatch=useDispatch();
+
+  const { user, loading } = useSelector((state) => state.userDetail) || {};
+
+
+
+  useEffect(()=>{
+  if(user){
+    console.log(user)
+    if(user.role==='admin') nav('/admin')
+    if(user.role==='employer') nav('/company')
+    if(user.role==='jobseeker') nav('/joobseeker')
+  }
+
+  },[user,nav])
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Add your login logic here
-    if (userId === "admin@gmail.com") nav("/Adminpage");
-    else if (userId === "company@gmail.com") nav("/CompanyLogin");
-    else if (userId === "jobseeker@gmail.com") nav("/JobSeekerLogin");
+    console.log({userId});
+    dispatch(loginUser({userId,password}));
+    console.log("bye");
+ 
   };
+
+
+  
 
   return (
     <>
