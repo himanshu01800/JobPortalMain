@@ -1,9 +1,15 @@
+import { useDispatch } from "react-redux";
 import { Outlet, Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { getJobs } from "../features/jobDetailSlice";
 
 
 const Layout = () => {
+  const dispatch=useDispatch();
+
+   dispatch(getJobs());
   return (
+
     <>
       <div className="container d-flex justify-content-center p-0 ">
         <nav className="navbar navbar-expand-lg p-0">

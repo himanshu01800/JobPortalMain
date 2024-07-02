@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployerProfile } from '../../features/profileDetailSlice';
+import { getJobs } from '../../features/jobDetailSlice';
 
 const PostNewJob = () => {
 
@@ -39,6 +40,7 @@ const PostNewJob = () => {
               
               console.log('Success:', result);
               dispatch(getEmployerProfile(id));
+              dispatch(getJobs());
               // Handle success
           } else {
               console.error('Error:', response.statusText);

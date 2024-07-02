@@ -3,14 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import ECustomModel from './ECustomModel';
+import { getJobs, removeJob } from '../../features/jobDetailSlice';
+import { getEmployerProfile } from '../../features/profileDetailSlice';
 
 const PostedJobs = () => {
    
 
   const profile= useSelector((state)=>state.profileDetail.profile)
   const jobs=profile.jobs;
+  const dispatch=useDispatch();
     const [showpopup,Setshowpopup]=useState(false);
     const [id,setId]=useState("");
+    const handleRemove = (id) => {
+      dispatch(removeJob(id));
+      console.log("done");
+    
+      setTimeout(() => {
+        dispatch(getEmployerProfile(profile.id));
+      }, 1000);
+    
+      setTimeout(() => {
+        dispatch(getJobs());
+      }, 2000);
+    };
     
    
   return (
@@ -31,7 +46,7 @@ const PostedJobs = () => {
           <h6 class="card-subtitle mb-2 text-muted">{items.location}</h6>
           <p class="card-text">{items.experince}</p>
           <button  onClick={()=>[setId(items.id),Setshowpopup(true)] }  class="card-link">View Details</button>
-          <button  class="card-link">RemoveJob</button>
+          <button onClick={()=>handleRemove(items.id)} class="card-link">RemoveJob</button>
         </div>
       </div>
         ))}

@@ -1,17 +1,28 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 
 const EChangePassword = () => {
-    const [currentPassword, setCurrentPassword] = useState('');
+    
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const {id}=useSelector((state)=>state.userDetail.user);
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      // Add password change logic here
-      console.log('Current Password:', currentPassword);
-      console.log('New Password:', newPassword);
-      console.log('Confirm Password:', confirmPassword);
+      
+      console.log(newPassword);
+      if(newPassword===confirmPassword){
+        const response = await fetch(`http://localhost:8080/users/changePassword/${id}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({password:newPassword})
+      });
+  
+      }
+    
     };
   return (
     <div className="container text-black">
@@ -19,18 +30,6 @@ const EChangePassword = () => {
       <div className="col-md-6">
         <h3 className="text-center mb-4">Change Password</h3>
         <form onSubmit={handleSubmit}>
-          <div className="form-group mb-4">
-            <label htmlFor="currentPassword">Current Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="currentPassword"
-              placeholder="Enter current password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-          </div>
           <div className="form-group mb-4">
             <label htmlFor="newPassword">New Password</label>
             <input
