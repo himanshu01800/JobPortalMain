@@ -8,8 +8,6 @@ import About from "./pages/About";
 import Staff from "./pages/Staff";
 import Career from "./pages/Career";
 import Services from "./pages/Services";
-
-
 import FindCandiate from "./pages/FindCandiate";
 import Header from "./Header";
 import Header2 from "./pages/Header2";
@@ -21,6 +19,12 @@ import EChangePassword from "./pages/Company/EChangePassword.js";
 import PostedJobs from "./pages/Company/PostedJob.js";
 import CompanyLayout from "./pages/Company/CompanyLayout.js";
 import JobseekerLayout from "./pages/JobSeeker/JobseekerLayout.js";
+import FindJob from "./pages/JobSeeker/FindJob.js";
+import JobSeekerDetails from "./pages/JobSeeker/JobSeekerDetails.js";
+import AppliedJobs from "./pages/JobSeeker/AppliedJobs.js";
+import Logout from "./Logout.js";
+import EmployerDetailsA from "./pages/Admin/EmployerDetailsA.js";
+import JobSeekerDetailsA from "./pages/Admin/JobSeekerDetailsA.js";
 
 export default function App() {
   return (
@@ -49,36 +53,34 @@ export default function App() {
               <Route path="*" element={<NoPage />} />
             </Route>
 
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route path="jobseekerreport" element={<Staff />} />
-              <Route path="companyreport" element={<Staff />} />
+            <Route path="/admin" element={<AdminLayout/>}>
+              <Route path="jobseekerreport" element={<JobSeekerDetailsA />} />
+              <Route path="companyreport" element={<EmployerDetailsA />} />
               <Route path="feedbackreport" element={<Staff />} />
-              <Route path="logout" element={<Login />} />
             </Route>
 
-            <Route path="/company" element={<CompanyLayout/>}>
+            <Route path="/company" element={<CompanyLayout />}>
               <Route path="findcandidate" element={<FindCandiate />} />
-              <Route path="postedjob" element={<PostedJobs/>} />
-              <Route path="postNewJob" element={<PostNewJob/>} />
+              <Route path="postedjob" element={<PostedJobs />} />
+              <Route path="postNewJob" element={<PostNewJob />} />
               <Route path="companyAccount" element={<EmployerDetail />} />
               <Route path="profilematch" element={<FindCandiate />} />
               <Route path="appliedjob" element={<FindCandiate />} />
               <Route path="changepassword" element={<EChangePassword />} />
               <Route path="myinbox" element={<FindCandiate />} />
               <Route path="sent" element={<FindCandiate />} />
-              <Route path="logout" element={<Login />} />
             </Route>
 
             <Route path="/jobseeker" element={<JobseekerLayout />}>
-              <Route path="findjob" element={<FindCandiate />} />
-              <Route path="jobseekeraccount" element={<FindCandiate />} />
+              <Route path="findjob" element={<FindJob />} />
+              <Route path="Myaccount" element={<JobSeekerDetails />} />
               <Route path="jobmatch" element={<FindCandiate />} />
-              <Route path="appliedjob" element={<FindCandiate />} />
+              <Route path="appliedjob" element={<AppliedJobs />} />
               <Route path="changepassword" element={<FindCandiate />} />
               <Route path="myinbox" element={<FindCandiate />} />
               <Route path="sent" element={<FindCandiate />} />
-              <Route path="logout" element={<Login />} />
             </Route>
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </div>
       </div>

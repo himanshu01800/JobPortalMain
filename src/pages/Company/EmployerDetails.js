@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postEmployerProfile } from '../../features/profileDetailSlice';
+import { jwtDecode } from 'jwt-decode';
 
 function EmployerDetail() {
   const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.userDetail.user);
+  const [id,setId]=useState();
   const {profile} =useSelector((state)=>state.profileDetail)
 
   const [formData, setFormData] = useState({
@@ -15,6 +16,10 @@ function EmployerDetail() {
   });
    
   useEffect(()=>{
+    const token=localStorage.getItem("jwtToken");
+    const Decoded=jwtDecode(token);
+    setId(Decoded.id);
+
     console.log(profile);
     if (profile) {
       setFormData({

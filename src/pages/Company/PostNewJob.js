@@ -5,10 +5,8 @@ import { getEmployerProfile } from '../../features/profileDetailSlice';
 import { getJobs } from '../../features/jobDetailSlice';
 
 const PostNewJob = () => {
-
-    const {id} = useSelector((state) => state.profileDetail.profile);
-
-    const dispatch=useDispatch();
+    const { id } = useSelector((state) => state.profileDetail.profile) || {};
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         position: '',
@@ -26,40 +24,42 @@ const PostNewJob = () => {
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-          const response = await fetch(`http://localhost:8080/Job/${id}`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(formData)
-          });
-          if (response.ok) {
-              const result = await response.json();
-              
-              console.log('Success:', result);
-              dispatch(getEmployerProfile(id));
-              dispatch(getJobs());
-              // Handle success
-          } else {
-              console.error('Error:', response.statusText);
-              // Handle error
-          }
-      } catch (error) {
-          console.error('Error:', error);
-          // Handle error
-      }
-  };
+        e.preventDefault();
+        const token = localStorage.getItem('jwtToken'); // Assuming the JWT is stored in local storage with key 'jwt'
+        try {
+            const response = await fetch(`http://localhost:8080/company/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Success:', result);
+                dispatch(getEmployerProfile(id));
+                dispatch(getJobs());
+                // Handle success
+            } else {
+                console.error('Error:', response.statusText);
+                // Handle error
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error
+        }
+    };
+
     return (
-        <div className="container mt-2 text-black d-flex flex-column align-items-center ">
+        <div className="container mt-2 text-black d-flex flex-column align-items-center">
             <h2>Post New Job</h2>
             <form onSubmit={handleSubmit} className="w-100">
-                <div className="form-group ">
+                <div className="form-group">
                     <label htmlFor="position">Position</label>
                     <input 
                         type="text" 
-                        className="form-control " 
+                        className="form-control" 
                         id="position" 
                         name="position" 
                         placeholder="Enter position" 

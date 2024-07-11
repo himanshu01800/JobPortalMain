@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 
@@ -6,7 +7,7 @@ const EChangePassword = () => {
     
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const {id}=useSelector((state)=>state.userDetail.user);
+      const {id}=jwtDecode(localStorage.getItem("jwtToken"))
   
     const handleSubmit = async (e) => {
       e.preventDefault();

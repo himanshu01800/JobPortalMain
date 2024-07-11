@@ -23,7 +23,7 @@ const Register = () => {
     console.log(userData);
 
     try {
-      const response = await fetch(`http://localhost:8080/users/add`, {
+      const response = await fetch(`http://localhost:8080/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
