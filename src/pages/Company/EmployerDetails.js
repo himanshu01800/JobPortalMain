@@ -86,7 +86,7 @@ function EmployerDetail() {
                 ></textarea>
               </div>
               <div className="form-group">
-                <label htmlFor="experience">Experience (years):</label>
+                <label htmlFor="experience"> Established(year):</label>
                 <input
                   type="number"
                   className="form-control"
