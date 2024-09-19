@@ -43,7 +43,14 @@ export const userDetail = createSlice({
     loading: false,
     error: null
   },
-  reducers: {},
+  reducers: {
+    // Reducer to clear the user data (logout)
+    logoutUser: (state) => {
+      localStorage.removeItem('jwtToken'); // Remove the token from local storage
+      state.user = null; // Reset the user state to null
+      state.error = null; // Optionally, clear any errors
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
@@ -59,5 +66,5 @@ export const userDetail = createSlice({
       });
   }
 });
-
+export const { logoutUser } = userDetail.actions;
 export default userDetail.reducer;

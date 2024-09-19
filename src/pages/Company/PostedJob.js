@@ -1,64 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Link } from 'react-router-dom';
 import ECustomModel from './ECustomModel';
 import { getJobs, removeJob } from '../../features/jobDetailSlice';
 import { getEmployerProfile } from '../../features/profileDetailSlice';
 
 const PostedJobs = () => {
-   
+  const profile = useSelector((state) => state.profileDetail.profile);
+  const jobs = profile?.jobs || []; // Safeguard against null profile
+  const dispatch = useDispatch();
+  const [showPopup, setShowPopup] = useState(false);
+  const [id, setId] = useState('');
 
-  const profile= useSelector((state)=>state.profileDetail.profile)
-  const jobs=profile.jobs;
-  const dispatch=useDispatch();
-    const [showpopup,Setshowpopup]=useState(false);
-    const [id,setId]=useState("");
-    const handleRemove = (id) => {
-      dispatch(removeJob(id));
-      console.log("done");
-    
-      setTimeout(() => {
-        dispatch(getEmployerProfile(profile.id));
-      }, 1000);
-    
-      setTimeout(() => {
-        dispatch(getJobs());
-      }, 2000);
-    };
-    
-   
+  const handleRemove = async (id) => {
+    await dispatch(removeJob(id)); // First, remove the job
+    console.log('Job removed');
+
+    await dispatch(getEmployerProfile(profile.id)); // Then fetch the updated profile
+    console.log('Profile updated');
+
+    await dispatch(getJobs()); // Finally, fetch the updated jobs
+    console.log('Jobs updated');
+  };
+
   return (
     <>
-    { showpopup ? <ECustomModel
-     id={id}
-     Setshowpopup={Setshowpopup}
-    /> :
-    <div className="AdminHome">
-
-  
-  <div className="page-content   Adhomecon" id="content">
-    <div className=' ' >
-        {jobs && jobs.map((items)=>(
-        <div key={items.id} class="card " >
-        <div class="card-body">
-          <h5 class="card-title">{items.position}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{items.location}</h6>
-          <p class="card-text">{items.experince}</p>
-          <button  onClick={()=>[setId(items.id),Setshowpopup(true)] }  class="card-link">View Details</button>
-          <button onClick={()=>handleRemove(items.id)} class="card-link">RemoveJob</button>
+      {showPopup ? (
+        <ECustomModel id={id} setShowPopup={setShowPopup} />
+      ) : (
+        <div className="AdminHome">
+          <div className="page-content Adhomecon" id="content">
+            <div>
+              {jobs.map((item) => (
+                <div key={item.id} className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">{item.position}</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">{item.location}</h6>
+                    <p className="card-text">{item.experience}</p>
+                    <button onClick={() => [setId(item.id), setShowPopup(true)]} className="card-link">
+                      View Details
+                    </button>
+                    <button onClick={() => handleRemove(item.id)} className="card-link">
+                      Remove Job
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-        ))}
-        
-
-    </div>
-    </div>
-    </div>
-}
+      )}
     </>
-    
-  )
-}
+  );
+};
 
-export default PostedJobs
+export default PostedJobs;

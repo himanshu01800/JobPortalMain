@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployerProfile } from '../../features/profileDetailSlice';
 import { getJobs } from '../../features/jobDetailSlice';
+import { jwtDecode } from 'jwt-decode';
 
 const PostNewJob = () => {
     const { id } = useSelector((state) => state.profileDetail.profile) || {};
     const dispatch = useDispatch();
-
+   const [userid,setUserId]=useState("");
     const [formData, setFormData] = useState({
         position: '',
         location: '',
         experience: '',
         description: ''
     });
-
+   
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -25,7 +26,12 @@ const PostNewJob = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('jwtToken'); // Assuming the JWT is stored in local storage with key 'jwt'
+        const token = localStorage.getItem('jwtToken'); 
+        console.log(token)
+        if (token) {
+            const decoded = jwtDecode(token);
+           setUserId(decoded.id);  
+          }
         try {
             const response = await fetch(`http://localhost:8080/company/${id}`, {
                 method: 'POST',
@@ -38,7 +44,8 @@ const PostNewJob = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Success:', result);
-                dispatch(getEmployerProfile(id));
+                dispatch(getEmployerProfile(userid));
+                console.log(id +"ianm id")
                 dispatch(getJobs());
                 // Handle success
             } else {

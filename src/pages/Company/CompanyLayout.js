@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import './CompanyLayout.css'; // Assuming you have your custom CSS in this file
-import { getEmployerProfile } from "../../features/profileDetailSlice";
+import { clearProfile, getEmployerProfile } from "../../features/profileDetailSlice";
+import { logoutUser } from "../../features/userDetailSlice";
 
 const CompanyLayout = () => {
   const dispatch = useDispatch();
@@ -76,7 +77,9 @@ const CompanyLayout = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
-    navigate('/');
+    dispatch(clearProfile());
+    dispatch(logoutUser());
+        navigate('/');
   };
 
   const checkProfileCompletion = (e, link) => {

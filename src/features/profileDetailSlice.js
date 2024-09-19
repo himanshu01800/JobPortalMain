@@ -8,6 +8,7 @@ export const getEmployerProfile = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const token = getToken();
+      console.log("Fetching employer profile for ID:", id); // Debugging
       const response = await fetch(`http://localhost:8080/company/profile/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -15,12 +16,15 @@ export const getEmployerProfile = createAsyncThunk(
       });
 
       if (!response.ok) {
+        console.log("API response was not ok:", response.status); // Debugging
         throw new Error('Network response was not ok');
       }
 
       const result = await response.json();
-      return result; 
+      console.log("Fetched employer profile:", result); // Debugging
+      return result;
     } catch (error) {
+      console.log("Error fetching profile:", error.message); // Debugging
       return rejectWithValue(error.message);
     }
   }
@@ -113,6 +117,11 @@ export const profileDetail = createSlice({
     error: null
   },
   reducers: {
+    clearProfile: (state) => {
+      state.profile = null;
+      state.error = null;
+      state.loading = false;
+    },
     // You can add reducers here if needed
   },
   extraReducers: (builder) => {
@@ -163,5 +172,6 @@ export const profileDetail = createSlice({
       })
   },
 });
+export const { clearProfile } = profileDetail.actions;
 
 export default profileDetail.reducer;
