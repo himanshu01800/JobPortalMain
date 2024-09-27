@@ -5,27 +5,27 @@ import { jwtDecode } from 'jwt-decode';
 
 function JobSeekerDetails() {
   const dispatch = useDispatch();
-    const [id,setID]=useState();
+  const [id, setID] = useState();
   const { profile } = useSelector((state) => state.profileDetail);
-
   const [formData, setFormData] = useState({
-    resumeLink: '',
+    resume: '',
     skills: '',
   });
-  useEffect(()=>{
-    const token=localStorage.getItem("jwtToken");
-    if(token){
-      const decode=jwtDecode(token);
-      setID(decode.id);
-     
-    }
-  },[])
+  const [successMessage, setSuccessMessage] = useState('');
 
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      const decode = jwtDecode(token);
+      setID(decode.id);
+    }
+  }, []);
 
   useEffect(() => {
     if (profile) {
+      console.log(profile);
       setFormData({
-        resumeLink: profile.resumeLink || '',
+        resume: profile.resume || '',
         skills: profile.skills || '',
       });
     }
@@ -40,7 +40,18 @@ function JobSeekerDetails() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(postJobSeekerProfile({ id, formData }));
+    dispatch(postJobSeekerProfile({ id, formData }))
+      .then(() => {
+        setSuccessMessage('Profile updated successfully!');
+        // Clear the message after a few seconds
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error("Failed to update profile:", error);
+        // Handle error if needed
+      });
   };
 
   return (
@@ -49,15 +60,16 @@ function JobSeekerDetails() {
         <div className="d-flex justify-content-center vh-100">
           <div className="col-10">
             <h1>Job Seeker Information</h1>
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="resumeLink">Resume Link:</label>
+                <label htmlFor="resume">Resume Link:</label>
                 <input
                   type="url"
                   className="form-control"
-                  id="resumeLink"
-                  name="resumeLink"
-                  value={formData.resumeLink}
+                  id="resume"
+                  name="resume"
+                  value={formData.resume}
                   onChange={handleChange}
                   required
                 />
@@ -74,7 +86,7 @@ function JobSeekerDetails() {
                   required
                 ></textarea>
               </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="submit" className="btn btn-primary ms-5 mt-2">Submit</button>
             </form>
           </div>
         </div>

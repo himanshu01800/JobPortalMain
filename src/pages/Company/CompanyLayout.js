@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import './CompanyLayout.css'; // Assuming you have your custom CSS in this file
+import './CompanyLayout.css';
 import { clearProfile, getEmployerProfile } from "../../features/profileDetailSlice";
 import { logoutUser } from "../../features/userDetailSlice";
 
@@ -79,7 +79,7 @@ const CompanyLayout = () => {
     localStorage.removeItem("jwtToken");
     dispatch(clearProfile());
     dispatch(logoutUser());
-        navigate('/');
+    navigate('/');
   };
 
   const checkProfileCompletion = (e, link) => {
@@ -100,8 +100,8 @@ const CompanyLayout = () => {
     <div className="full-screen">
       <div className="row full-screen">
         <div className="col col-3">
-          <div className="col-3 d-flex-col bg-white border w-100 h-100">
-            <div className="text-center border">
+          <div className="col-3 d-flex-col bg-white w-100 h-100">
+            <div className="text-center">
               <h6>Welcome {firstName}</h6>
             </div>
             <div className="container text-center">
@@ -120,24 +120,24 @@ const CompanyLayout = () => {
             <div>
               <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} />
-                {selectedFile && <button type="submit">Upload</button>}
+                {selectedFile && <button type="submit" className="btn btn-upload">Upload</button>}
               </form>
             </div>
-            <div className="my-1 border">
-              <div className="text-center my-1 border">
-                <button onClick={() => navigate('/company/companyAccount')}>My Account</button>
+            <div className="my-1">
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/company/companyAccount')}>My Account</button>
               </div>
-              <div className="text-center my-1 border">
-                <button onClick={(e) => checkProfileCompletion(e, '/company/postNewJob')}>Post New Job</button>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/company/postNewJob')}>Post New Job</button>
               </div>
-              <div className="text-center my-1 border">
-                <button onClick={(e) => checkProfileCompletion(e, '/company/profilematch')}>Profile Match</button>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/company/profilematch')}>Profile Match</button>
               </div>
-              <div className="text-center my-1 border">
-                <button onClick={(e) => checkProfileCompletion(e, '/company/postedjob')}>Posted Job</button>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/company/postedjob')}>Posted Job</button>
               </div>
-              <div className="text-center my-1 border">
-                <button onClick={(e) => checkProfileCompletion(e, '/company/changepassword')}>Change Password</button>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/company/changepassword')}>Change Password</button>
               </div>
             </div>
           </div>
@@ -148,18 +148,18 @@ const CompanyLayout = () => {
           </div>
         </div>
         <div className="col col-3">
-          <div className="w-100 d-flex-col bg-white border">
-            <div className="text-center my-2 border">
-              <button onClick={handleLogout} className="btn btn-link">Log Out</button>
+          <div className="w-100 d-flex-col bg-white">
+            <div className="text-center my-2">
+              <button onClick={handleLogout} className="btn btn-logout">Log Out</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Message</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/messages')} className="btn">My Message</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Inbox</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/inbox')} className="btn">My Inbox</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Sent</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/sent')} className="btn">My Sent</button>
             </div>
           </div>
         </div>

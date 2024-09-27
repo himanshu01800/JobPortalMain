@@ -29,7 +29,7 @@ import JobSeekerDetailsA from "./pages/Admin/JobSeekerDetailsA.js";
 export default function App() {
   return (
     <>
-      <div className="container border my-2">
+      <div className="container  my-2">
         <div className="row">
           <div className="col-4 d-flex-col">
             <Header />
@@ -47,7 +47,7 @@ export default function App() {
               <Route path="about" element={<About />} />
               <Route path="contact" element={<Contact />} />
               <Route path="services" element={<Services />} />
-              <Route path="career" element={<Career />} />
+              <Route path="career" element={<Services/>} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="*" element={<NoPage />} />

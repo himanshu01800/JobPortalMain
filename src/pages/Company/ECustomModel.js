@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 
-const CustomModel = ( {id,Setshowpopup}) => {
+const CustomModel = ( {id,setShowPopup}) => {
 
   const allJobs =useSelector((state)=> state.profileDetail.profile.jobs )
   console.log(allJobs);
@@ -16,7 +16,7 @@ const CustomModel = ( {id,Setshowpopup}) => {
     <div className="modalBackground">
       <div className="modalContainer">
         <div className="w-100 d-flex justify-content-end">
-      <button onClick={()=> Setshowpopup(false)} type="button " class="close " aria-label="Close">
+      <button onClick={()=> setShowPopup(false)} type="button " class="close " aria-label="Close">
      <span aria-hidden="true">&times;</span>
      </button>
      </div>

@@ -29,7 +29,7 @@ const JCustomModel = ( {id,Setshowpopup}) => {
        
     </div>
     <div className="w-100 d-flex justify-content-center mt-3">
-    <button className=" btn btn-primary w-50">Apply Job</button>
+    <button className=" btn btn-primary w-50">Withdraw Application</button>
     </div>
     
 

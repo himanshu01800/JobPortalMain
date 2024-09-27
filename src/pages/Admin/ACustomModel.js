@@ -21,9 +21,9 @@ const ACustomModel = ( {id,Setshowpopup}) => {
      </button>
      </div>
      <div className="d-flex flex-column align-items-center h-75 mt-4 justify-content-evenly text-black">
-         <p>Job Title: {singleUser[0].name}</p>
-          <p>Degree: {singleUser[0].email}</p>
-          <p>Skills: {singleUser[0].role}</p>
+         <p>Name: {singleUser[0].name}</p>
+          <p>Email: {singleUser[0].email}</p>
+          <p>Role: {singleUser[0].role}</p>
           
           
        

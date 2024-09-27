@@ -6,16 +6,26 @@ import { getJobs } from '../../features/jobDetailSlice';
 import { jwtDecode } from 'jwt-decode';
 
 const PostNewJob = () => {
-    const { id } = useSelector((state) => state.profileDetail.profile) || {};
+    const profile = useSelector((state) => state.profileDetail.profile);
     const dispatch = useDispatch();
-   const [userid,setUserId]=useState("");
+
+    const [userid, setUserId] = useState("");
     const [formData, setFormData] = useState({
         position: '',
         location: '',
         experience: '',
         description: ''
     });
-   
+    const [successMessage, setSuccessMessage] = useState(""); // State for success message
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken'); // Fetch the token on mount
+        if (token) {
+            const decoded = jwtDecode(token);
+            setUserId(decoded.id); // Set the user ID from the token
+        }
+    }, []); // This effect runs once on mount
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -26,41 +36,61 @@ const PostNewJob = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('jwtToken'); 
-        console.log(token)
-        if (token) {
-            const decoded = jwtDecode(token);
-           setUserId(decoded.id);  
-          }
+
         try {
-            const response = await fetch(`http://localhost:8080/company/${id}`, {
+            const token = localStorage.getItem('jwtToken');
+            if (!token || !userid) {
+                console.error('Token or user ID missing');
+                return; // Exit if there's no token or userid
+            }
+
+            const response = await fetch(`http://localhost:8080/company/${profile?.id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Add token in header
                 },
                 body: JSON.stringify(formData)
             });
+
             if (response.ok) {
                 const result = await response.json();
                 console.log('Success:', result);
-                dispatch(getEmployerProfile(userid));
-                console.log(id +"ianm id")
-                dispatch(getJobs());
-                // Handle success
+
+                // Dispatch actions to update profile and jobs after job is posted
+                await dispatch(getEmployerProfile(userid));
+                console.log(userid + " is the user id");
+                await dispatch(getJobs());
+
+                // Set success message and clear it after 1 second
+                setSuccessMessage("Job posted successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 1000);
+
+                // Reset form after successful submission
+                setFormData({
+                    position: '',
+                    location: '',
+                    experience: '',
+                    description: ''
+                });
             } else {
                 console.error('Error:', response.statusText);
-                // Handle error
             }
         } catch (error) {
             console.error('Error:', error);
-            // Handle error
         }
     };
 
     return (
         <div className="container mt-2 text-black d-flex flex-column align-items-center">
             <h2>Post New Job</h2>
+            {successMessage && (
+                <div className="alert alert-success" role="alert">
+                    {successMessage}
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="w-100">
                 <div className="form-group">
                     <label htmlFor="position">Position</label>
@@ -110,7 +140,7 @@ const PostNewJob = () => {
                         onChange={handleChange} 
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary ms-5 mt-3">Submit</button>
             </form>
         </div>
     );

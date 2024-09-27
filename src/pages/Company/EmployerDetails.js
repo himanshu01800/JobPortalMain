@@ -5,22 +5,22 @@ import { jwtDecode } from 'jwt-decode';
 
 function EmployerDetail() {
   const dispatch = useDispatch();
-  const [id,setId]=useState();
-  const {profile} =useSelector((state)=>state.profileDetail)
-
+  const [id, setId] = useState();
+  const { profile } = useSelector((state) => state.profileDetail) || {};
   const [formData, setFormData] = useState({
     webSiteUrl: '',
     address: '',
     description: '',
     established: 0,
   });
-   
-  useEffect(()=>{
-    const token=localStorage.getItem("jwtToken");
-    const Decoded=jwtDecode(token);
+  
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    const Decoded = jwtDecode(token);
     setId(Decoded.id);
 
-    console.log(profile);
     if (profile) {
       setFormData({
         webSiteUrl: profile.webSiteUrl,
@@ -29,17 +29,29 @@ function EmployerDetail() {
         established: profile.established,
       });
     }
-  },[profile])
+  }, [profile]);
+
   const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(postEmployerProfile({ id, formData }));
+    dispatch(postEmployerProfile({ id, formData }))
+      .then(() => {
+        setSuccessMessage('Profile updated successfully!');
+        // Clear the message after a few seconds
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error("Failed to update profile:", error);
+        // Handle error if needed
+      });
   };
 
   return (
@@ -48,11 +60,12 @@ function EmployerDetail() {
         <div className="d-flex justify-content-center vh-100">
           <div className="col-10">
             <h1>Contact Information</h1>
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="webSiteUrl">Website URL:</label>
                 <input
-                  type="url"
+                  type="text"
                   className="form-control"
                   id="webSiteUrl"
                   name="webSiteUrl"
@@ -86,7 +99,7 @@ function EmployerDetail() {
                 ></textarea>
               </div>
               <div className="form-group">
-                <label htmlFor="experience"> Established(year):</label>
+                <label htmlFor="established">Established (year):</label>
                 <input
                   type="number"
                   className="form-control"
@@ -97,7 +110,7 @@ function EmployerDetail() {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="submit" className="btn btn-primary ms-5 mt-2">Submit</button>
             </form>
           </div>
         </div>

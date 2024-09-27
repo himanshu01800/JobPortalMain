@@ -45,9 +45,9 @@ const Home = () => {
   };
 
   return (
-    <div className="container my-3 border">
+    <div className="container my-3 ">
       <div className="row">
-        <div className="col-8 d-flex-col border">
+        <div className="col-8 d-flex-col ">
           <img
             src="logo/online-job-portal.jpg"
             alt=""
@@ -56,7 +56,7 @@ const Home = () => {
           />
         </div>
         <div className="col-4 d-flex-col">
-          <div className="d-flex align-item-center justify-content-center w-100 vh-40 bg-silver border ">
+          <div className="d-flex align-item-center justify-content-center w-100 vh-40  ">
             <div className="form_container p-5 rounded bg-dark text-white w-40 my-1">
               <h5 className="text-center mb-3">Login Form</h5>
               <form onSubmit={handleLogin}>
@@ -88,17 +88,15 @@ const Home = () => {
                   <input type="checkbox" />
                   <label htmlFor="check">Remember me</label>
                 </div>
-                <div className="row">
-                  <div className="col-4">
-                    <button type="submit" className="btn btn-primary mt-3">
-                      Login
-                    </button>
+                <div className="row ">
+                  <div className="col-6">
+                    <button type="submit" className="btn btn-primary mt-3 w-100">Login</button>
                   </div>
-                  <div className="col-8">
+                  <div className="col-6">
                     <p className="cur d-flex justify-content-center">
                       <div className="dropdown">
                         <button
-                          className="btn btn-primary mt-3"
+                          className="btn btn-primary mt-3 w-100"
                           type="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"

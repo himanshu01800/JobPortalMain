@@ -1,46 +1,99 @@
+/* AdminLayout.css */
+
 .full-screen {
   height: 100vh;
   width: 100vw;
- 
+  background-color: #ffffff; /* Light gray background */
 }
-/* CompanyLayout.css */
 
+.scrollable-content {
+  height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  max-height: 600px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  display: none;
+}
+
+.btn {
+  width: 80%; /* Set button width to 80% */
+  background-color: #ffffff; /* White background */
+  color: #333333; /* Dark gray text */
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin: 0 auto; /* Center the button */
+  display: block; /* Make the button a block element */
+  border: none; /* Remove border */
+}
+
+.btn:hover {
+  background-color: #f0f0f0; /* Light gray on hover */
+}
+
+.btn-logout {
+  background-color: #ffffff; /* White for logout */
+  color: #333333; /* Dark gray text */
+}
+
+.btn-logout:hover {
+  background-color: #e2e2e2; /* Light gray on hover */
+}
+
+.container {
+  margin-bottom: 20px;
+}
+
+.text-center {
+  margin: 10px 0;
+}
+
+/* Popup Styling */
 .popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Make sure it's above other elements */
+  z-index: 1000;
 }
 
 .popup-content {
   background-color: white;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
+  max-width: 400px;
+  width: 100%;
 }
 
-.btn {
+.popup button {
   margin: 10px;
 }
 
-
-
-
-.scrollable-content {
-  height: 100%; /* Ensure it takes full height for scrolling */
-  overflow-y: scroll; /* Ensure the content is scrollable */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  max-height: 600px;
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
 }
 
-.scrollable-content::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  opacity: 0.8;
 }

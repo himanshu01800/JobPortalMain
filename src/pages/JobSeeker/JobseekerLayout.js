@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import { getJobSeekerProfile } from "../../features/profileDetailSlice";
-import {jwtDecode} from "jwt-decode";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import '../Company/CompanyLayout.css'
+import { clearProfile, getJobSeekerProfile } from "../../features/profileDetailSlice";
+import { logoutUser } from "../../features/userDetailSlice";
 
-const JobseekerLayout = () => {
+const JobSeekerLayout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [id, setId] = useState();
   const [firstName, setFirstName] = useState();
+  const { profile } = useSelector((state) => state.profileDetail) || {};
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageURL, setImageURL] = useState("");
-  const navigate=useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    navigate('/');
-  };
-
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
@@ -34,13 +33,8 @@ const JobseekerLayout = () => {
   }, [id, dispatch]);
 
   const fetchProfileImage = async (userId) => {
-    const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`http://localhost:8080/${userId}/profileImage`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await fetch(`http://localhost:8080/${userId}/profileImage`);
       if (response.ok) {
         const blob = await response.blob();
         setImageURL(URL.createObjectURL(blob));
@@ -61,20 +55,16 @@ const JobseekerLayout = () => {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      const token = localStorage.getItem('jwtToken');
 
       try {
         const response = await fetch(`http://localhost:8080/${id}/uploadProfileImage`, {
           method: "POST",
           body: formData,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
         });
         if (response.ok) {
-          fetchProfileImage(id); // Fetch the updated image after upload
+          fetchProfileImage(id);
           setSelectedFile(null);
-          event.target.reset(); // Clear the file input
+          event.target.reset();
           console.log("Profile image uploaded successfully");
         } else {
           console.error("Failed to upload profile image");
@@ -85,12 +75,33 @@ const JobseekerLayout = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    dispatch(clearProfile());
+    dispatch(logoutUser());
+    navigate('/');
+  };
+
+  const checkProfileCompletion = (e, link) => {
+    if (!profile || Object.keys(profile).length === 0) {
+      e.preventDefault();
+      setShowPopup(true);
+    } else {
+      navigate(link);
+    }
+  };
+
+  const redirectToMyAccount = () => {
+    setShowPopup(false);
+    navigate('/jobseeker/myAccount');
+  };
+
   return (
     <div className="full-screen">
       <div className="row full-screen">
         <div className="col col-3">
-          <div className="col-3 d-flex-col bg-white border w-100 h-100">
-            <div className="text-center border">
+          <div className="col-3 d-flex-col bg-white w-100 h-100">
+            <div className="text-center">
               <h6>Welcome {firstName}</h6>
             </div>
             <div className="container text-center">
@@ -99,8 +110,8 @@ const JobseekerLayout = () => {
                   src={imageURL}
                   className="img-fluid"
                   alt="Profile"
-                  width="200px" // Increase the width
-                  height="200px" // Increase the height
+                  width="100px"
+                  height="100px"
                 />
               ) : (
                 <div>No profile image</div>
@@ -109,24 +120,24 @@ const JobseekerLayout = () => {
             <div>
               <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} />
-                {selectedFile && <button type="submit">Upload</button>}
+                {selectedFile && <button type="submit" className="btn btn-upload">Upload</button>}
               </form>
             </div>
-            <div className="my-1 border">
-              <div className="text-center my-1 border">
-                <Link to="/jobseeker/Myaccount">My Account</Link>
+            <div className="my-1">
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/jobseeker/myAccount')}>My Account</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/jobseeker/findjob">Find Jobs</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/findjob')}>Find Jobs</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/profileMatch">Profile Match</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/mySavedJobs')}>My Saved Jobs</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/jobseeker/appliedjob">Applied Job</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/appliedjob')}>Applied Job</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/company/changepassword">Change Password</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/changepassword')}>Change Password</button>
               </div>
             </div>
           </div>
@@ -137,26 +148,33 @@ const JobseekerLayout = () => {
           </div>
         </div>
         <div className="col col-3">
-          <div className="w-100 d-flex-col bg-white border">
-            <div className="text-center my-2 border">
-            <div className="text-center my-2 border">
-              <button onClick={handleLogout} className="btn btn-link">Log Out</button>
+          <div className="w-100 d-flex-col bg-white">
+            <div className="text-center my-2">
+              <button onClick={handleLogout} className="btn btn-logout">Log Out</button>
             </div>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/jobseeker/messages')} className="btn">My Messages</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Message</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/jobseeker/inbox')} className="btn">My Inbox</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Inbox</Link>
-            </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Sent</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/jobseeker/sent')} className="btn">My Sent</button>
             </div>
           </div>
         </div>
       </div>
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>Your profile is incomplete. Please complete your profile before proceeding.</p>
+            <button onClick={redirectToMyAccount} className="btn btn-primary">Complete Profile</button>
+            <button onClick={() => setShowPopup(false)} className="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default JobseekerLayout;
+export default JobSeekerLayout;

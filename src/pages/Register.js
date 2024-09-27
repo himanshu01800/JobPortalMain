@@ -9,9 +9,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
   const [role, setRole] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
 
   const handleRegister = async (e) => {
-   
     e.preventDefault();
     const userData = {
       firstName,
@@ -32,92 +32,100 @@ const Register = () => {
       });
 
       if (response.ok) {
-        // Assuming your API responds with user data or a token
         const result = await response.json();
         console.log("Registration successful", result);
+        setSuccessMessage("Registration successful! Redirecting...");
 
-        // Example of navigation after successful registration
-        if (role === "admin") {
-          nav("/admin");
-        } else if (role === "employer") {
-          nav("/company");
-        } else if (role === "jobseeker") {
-          nav("/jobseeker");
-        }
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          nav('/');
+        }, 2000);
       } else {
         console.error("Registration failed");
-        // Handle registration failure (e.g., display error message)
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle error (e.g., display error message)
     }
   };
+
   return (
     <>
-      <div className="container my-3 border">
-        <div className="row">
+      <div className="container">
+        <div className="row justify-content-center">
           <div className="col-12 d-flex-col">
-            <div className="d-flex align-items-center justify-content-center w-100 vh-40 bg-silver">
-              <div className="form_container p-5 rounded bg-silver text-dark w-100 my-1">
-                <form onSubmit={handleRegister}>
-                  <div className="form-group d-flex mb-3 row">
-                    <label htmlFor="firstname" className="form-label col-4 text-end">
-                      <strong>First Name:</strong>
-                    </label>
+            <div className="form_container d-flex justify-content-center p-5 rounded text-dark w-100 my-1">
+              <form onSubmit={handleRegister} className="w-100">
+                <div className="form-group d-flex align-items-center mb-3 row">
+                  <label htmlFor="firstname" className="form-label col-2 text-end">
+                    <strong>First Name:</strong>
+                  </label>
+                  <div className="col-10">
                     <input
                       type="text"
-                      className="col-8"
+                      className="form-control"
                       placeholder="Enter your first name"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      style={{ width: "80%" }}
                     />
                   </div>
-                  <div className="form-group mb-3 d-flex row">
-                    <label htmlFor="lastname" className="form-label col-4 text-end">
-                      <strong>Last Name:</strong>
-                    </label>
+                </div>
+                <div className="form-group mb-3 d-flex align-items-center row">
+                  <label htmlFor="lastname" className="form-label col-2 text-end">
+                    <strong>Last Name:</strong>
+                  </label>
+                  <div className="col-10">
                     <input
                       type="text"
-                      className="col-8"
+                      className="form-control"
                       placeholder="Enter your last name"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      style={{ width: "80%" }}
                     />
                   </div>
-                  <div className="form-group mb-3 d-flex row">
-                    <label htmlFor="email" className="form-label col-4 text-end">
-                      <strong>Email:</strong>
-                    </label>
+                </div>
+                <div className="form-group mb-3 d-flex align-items-center row">
+                  <label htmlFor="email" className="form-label col-2 text-end">
+                    <strong>Email:</strong>
+                  </label>
+                  <div className="col-10">
                     <input
                       type="email"
-                      className="col-8"
+                      className="form-control"
                       placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      style={{ width: "80%" }}
                     />
                   </div>
-                  <div className="form-group mb-3 d-flex row">
-                    <label htmlFor="password" className="form-label col-4 text-end">
-                      <strong>Password:</strong>
-                    </label>
+                </div>
+                <div className="form-group mb-3 d-flex align-items-center row">
+                  <label htmlFor="password" className="form-label col-2 text-end">
+                    <strong>Password:</strong>
+                  </label>
+                  <div className="col-10">
                     <input
                       type="password"
-                      className="col-8"
+                      className="form-control"
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      style={{ width: "80%" }}
                     />
                   </div>
-              
-                  <div className="form-group mb-3 d-flex row">
-                    <label htmlFor="role" className="form-label col-4 text-end">
-                      <strong>Role:</strong>
-                    </label>
+                </div>
+
+                <div className="form-group mb-3 d-flex align-items-center row">
+                  <label htmlFor="role" className="form-label col-2 text-end">
+                    <strong>Role:</strong>
+                  </label>
+                  <div className="col-10">
                     <select
-                      className="col-8"
+                      className="form-control"
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
+                      style={{ width: "80%" }}
                     >
                       <option value="">Select Role</option>
                       <option value="admin">Admin</option>
@@ -125,19 +133,20 @@ const Register = () => {
                       <option value="employer">Employer</option>
                     </select>
                   </div>
-                  <div className="form-group mb-1">
-                    <input type="checkbox" />
-                    <label htmlFor="check" className="mt-1">
-                      Remember me
-                    </label>
+                </div>
+                
+                <div className="form-group mb-3 d-flex justify-content-end">
+                  <button type="submit" className="btn btn-primary">
+                    Register
+                  </button>
+                </div>
+
+                {successMessage && ( // Display success message
+                  <div className="alert alert-success mt-3">
+                    {successMessage}
                   </div>
-                  <div className="form-group mb-3 d-flex justify-content-end">
-                    <button type="submit" className="btn btn-primary">
-                      Register
-                    </button>
-                  </div>
-                </form>
-              </div>
+                )}
+              </form>
             </div>
           </div>
         </div>

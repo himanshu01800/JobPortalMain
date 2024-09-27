@@ -1,40 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import { getJobSeekerProfile } from "../../features/profileDetailSlice";
+import { useDispatch } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 import { readUsers } from "../../features/userListDetailSlice";
 import { jwtDecode } from "jwt-decode";
 
-
-
-
-
 const AdminLayout = () => {
-  const [id,setId]=useState();
-  const [firstName,setFirstName]=useState();
-  const dispatch = useDispatch();
+  const [id, setId] = useState(null);
+  const [firstName, setFirstName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageURL, setImageURL] = useState("");
-  const navigate=useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setId(decoded.id);
+        setFirstName(decoded.firstName);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      const timer = setTimeout(() => {
+        dispatch(readUsers()).catch((error) => console.error("Error reading users:", error));
+        fetchProfileImage(id);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [id, dispatch]);
+
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
     navigate('/');
   };
-
-
-
-  useEffect(()=>{
-    const token=localStorage.getItem("jwtToken");
-    if(token){
-      const decode=jwtDecode(token);
-      setId(decode.id);
-      setFirstName(decode.firstName);
-    }
-  })
-  useEffect(() => {
-    dispatch(readUsers());
-    fetchProfileImage(id);
-  }, [id, dispatch]);
 
   const fetchProfileImage = async (userId) => {
     try {
@@ -66,9 +71,9 @@ const AdminLayout = () => {
           body: formData,
         });
         if (response.ok) {
-          fetchProfileImage(id); // Fetch the updated image after upload
+          fetchProfileImage(id);
           setSelectedFile(null);
-          event.target.reset(); // Clear the file input
+          event.target.reset();
           console.log("Profile image uploaded successfully");
         } else {
           console.error("Failed to upload profile image");
@@ -83,8 +88,8 @@ const AdminLayout = () => {
     <div className="full-screen">
       <div className="row full-screen">
         <div className="col col-3">
-          <div className="col-3 d-flex-col bg-white border w-100 h-100">
-            <div className="text-center border">
+          <div className="col-3 d-flex-col bg-white w-100 h-100">
+            <div className="text-center">
               <h6>Welcome {firstName}</h6>
             </div>
             <div className="container text-center">
@@ -93,8 +98,8 @@ const AdminLayout = () => {
                   src={imageURL}
                   className="img-fluid"
                   alt="Profile"
-                  width="200px" // Increase the width
-                  height="200px" // Increase the height
+                  width="200px"
+                  height="200px"
                 />
               ) : (
                 <div>No profile image</div>
@@ -103,24 +108,24 @@ const AdminLayout = () => {
             <div>
               <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} />
-                {selectedFile && <button type="submit">Upload</button>}
+                {selectedFile && <button type="submit" className="btn btn-upload">Upload</button>}
               </form>
             </div>
-            <div className="my-1 border">
-              <div className="text-center my-1 border">
-                <Link to="/jobseeker/Myaccount">My Account</Link>
+            <div className="my-1">
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/jobseeker/Myaccount')}>My Account</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/admin/companyreport">Employers</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/admin/companyreport')}>Employers</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/admin/jobseekerreport">JobSeekers</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/admin/jobseekerreport')}>JobSeekers</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/jobseeker/appliedjob">FeedBack</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/jobseeker/appliedjob')}>Feedback</button>
               </div>
-              <div className="text-center my-1 border">
-                <Link to="/company/changepassword">Change Password</Link>
+              <div className="text-center my-1">
+                <button className="btn" onClick={() => navigate('/company/changepassword')}>Change Password</button>
               </div>
             </div>
           </div>
@@ -131,18 +136,18 @@ const AdminLayout = () => {
           </div>
         </div>
         <div className="col col-3">
-          <div className="w-100 d-flex-col bg-white border">
-            <div className="text-center my-2 border">
-            <button onClick={handleLogout} className="btn btn-link">Log Out</button>
+          <div className="w-100 d-flex-col bg-white">
+            <div className="text-center my-2">
+              <button onClick={handleLogout} className="btn btn-logout">Log Out</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Message</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/messages')} className="btn">My Messages</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Inbox</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/inbox')} className="btn">My Inbox</button>
             </div>
-            <div className="text-center my-2 border">
-              <Link to="#">My Sent</Link>
+            <div className="text-center my-2">
+              <button onClick={() => navigate('/sent')} className="btn">My Sent</button>
             </div>
           </div>
         </div>
