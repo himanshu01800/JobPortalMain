@@ -131,7 +131,7 @@ const JobSeekerLayout = () => {
                 <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/findjob')}>Find Jobs</button>
               </div>
               <div className="text-center my-1">
-                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/mySavedJobs')}>My Saved Jobs</button>
+                <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/companies')}>Companies</button>
               </div>
               <div className="text-center my-1">
                 <button className="btn" onClick={(e) => checkProfileCompletion(e, '/jobseeker/appliedjob')}>Applied Job</button>

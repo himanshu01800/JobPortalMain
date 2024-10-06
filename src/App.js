@@ -26,6 +26,9 @@ import Logout from "./Logout.js";
 import EmployerDetailsA from "./pages/Admin/EmployerDetailsA.js";
 import JobSeekerDetailsA from "./pages/Admin/JobSeekerDetailsA.js";
 
+import ProfileMatch from "./pages/Company/ProfileMatch.js";
+import Companies from "./pages/JobSeeker/Companies.js";
+
 export default function App() {
   return (
     <>
@@ -64,21 +67,20 @@ export default function App() {
               <Route path="postedjob" element={<PostedJobs />} />
               <Route path="postNewJob" element={<PostNewJob />} />
               <Route path="companyAccount" element={<EmployerDetail />} />
-              <Route path="profilematch" element={<FindCandiate />} />
+              <Route path="profilematch" element={<ProfileMatch />} />
               <Route path="appliedjob" element={<FindCandiate />} />
               <Route path="changepassword" element={<EChangePassword />} />
               <Route path="myinbox" element={<FindCandiate />} />
-              <Route path="sent" element={<FindCandiate />} />
             </Route>
 
             <Route path="/jobseeker" element={<JobseekerLayout />}>
               <Route path="findjob" element={<FindJob />} />
               <Route path="Myaccount" element={<JobSeekerDetails />} />
-              <Route path="jobmatch" element={<FindCandiate />} />
+              <Route path="companies" element={<Companies />} />
               <Route path="appliedjob" element={<AppliedJobs />} />
               <Route path="changepassword" element={<FindCandiate />} />
               <Route path="myinbox" element={<FindCandiate />} />
-              <Route path="sent" element={<FindCandiate />} />
+             
             </Route>
             <Route path="/logout" element={<Logout />} />
           </Routes>
